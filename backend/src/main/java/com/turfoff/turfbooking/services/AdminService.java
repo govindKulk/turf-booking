@@ -11,6 +11,6 @@ public interface AdminService {
     AdminEntity saveAdmin(AdminEntity adminEntity);
 
     void updatePassword(AdminDto adminDto);
-
+    Optional<AdminEntity> getAdminByUsername(String username);
     void updatePhoneNumber(AdminDto adminDto);
 }

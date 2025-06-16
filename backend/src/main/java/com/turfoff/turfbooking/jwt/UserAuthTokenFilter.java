@@ -1,5 +1,6 @@
 package com.turfoff.turfbooking.jwt;
 
+import com.turfoff.turfbooking.services.CombinedUserDetailsService;
 import com.turfoff.turfbooking.services.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,6 +26,8 @@ public class UserAuthTokenFilter extends OncePerRequestFilter {
             "/users/new",
             "/users/signin",
             "/users/serveralive",
+            "/admin/new",
+            "/admin/signin",
             "/swagger-ui",
             "/v3/api-docs"
     );
@@ -33,7 +36,7 @@ public class UserAuthTokenFilter extends OncePerRequestFilter {
     private JwtUtils jwtUtils;
 
     @Autowired
-    private CustomUserDetailsService userDetailsService;
+    private CombinedUserDetailsService userDetailsService;
 
     private String parseJwt(HttpServletRequest request) {
         return jwtUtils.getJwtFromHeader(request);
@@ -59,6 +62,7 @@ public class UserAuthTokenFilter extends OncePerRequestFilter {
 
         try {
             String jwt = parseJwt(request);
+            System.out.println(request.getHeader("Authorization"));
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String username = jwtUtils.getUsernameFromJwtToken(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);

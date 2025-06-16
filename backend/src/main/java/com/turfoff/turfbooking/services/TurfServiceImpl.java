@@ -40,4 +40,9 @@ public class TurfServiceImpl implements TurfService {
 
     }
 
+    @Override
+    public List<TurfEntity> getAllTurfsByAdmin(String adminId) {
+        return turfRepository.findByOwner(adminId);
+    }
+
 }

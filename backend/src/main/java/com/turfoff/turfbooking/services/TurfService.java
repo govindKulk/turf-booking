@@ -13,4 +13,6 @@ public interface TurfService {
     Optional<TurfEntity> getTurf(String turfId);
     List<TurfEntity> getNearByTurfs(Point point, Distance distance);
     List<TurfEntity>  getAllTurfs();
+
+    List<TurfEntity> getAllTurfsByAdmin(String adminId);
 }

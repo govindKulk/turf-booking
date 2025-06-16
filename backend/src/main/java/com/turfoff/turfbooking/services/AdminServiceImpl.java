@@ -35,4 +35,10 @@ public class AdminServiceImpl implements AdminService {
     public void updatePhoneNumber(AdminDto adminDto) {
         adminRepository.updatePhoneNumber(adminDto.getId(), adminDto.getPhone());
     }
+
+    @Override
+    public Optional<AdminEntity> getAdminByUsername(String username){
+        Optional<AdminEntity> adminOpt = adminRepository.findByUsername(username);
+        return adminOpt;
+    }
 }
