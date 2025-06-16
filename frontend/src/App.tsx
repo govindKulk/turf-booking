@@ -13,7 +13,11 @@ import MyBookings from "./pages/MyBookings";
 import Profile from "./pages/Profile";
 import Layout from "./components/layout/Layout";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { AdminAuthProvider, useAdminAuth } from "./contexts/AdminAuthContext";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminLogin from "./pages/AdminLogin";
+import AdminSignup from "./pages/AdminSignup";
+import AdminTurfManagement from "./pages/AdminTurfManagement";
 
 const queryClient = new QueryClient();
 
@@ -39,12 +43,28 @@ const AdminRoute = () => {
   return isAuthenticated && isAdmin ? <Outlet /> : <Navigate to="/" replace />;
 };
 
+const AdminProtectedRoute = () => {
+  const { isAuthenticated, isLoading } = useAdminAuth();
+  
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/admin/login" replace />;
+};
+
 const AppRoutes = () => {
     const { isAuthenticated } = useAuth();
+    const { isAuthenticated: isAdminAuthenticated } = useAdminAuth();
+    
     return (
         <Routes>
             <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
             <Route path="/signup" element={isAuthenticated ? <Navigate to="/" /> : <Signup />} />
+
+            {/* Admin Authentication Routes */}
+            <Route path="/admin/login" element={isAdminAuthenticated ? <Navigate to="/admin" /> : <AdminLogin />} />
+            <Route path="/admin/register" element={isAdminAuthenticated ? <Navigate to="/admin" /> : <AdminSignup />} />
 
             <Route element={<Layout><Outlet/></Layout>}>
                 <Route path="/" element={<Home />} />
@@ -61,6 +81,12 @@ const AppRoutes = () => {
                   <Route path="/admin" element={<AdminDashboard />} />
                 </Route>
 
+                {/* Admin Protected Routes */}
+                <Route element={<AdminProtectedRoute />}>
+                  <Route path="/admin" element={<AdminDashboard />} />
+                  <Route path="/admin/turfs" element={<AdminTurfManagement />} />
+                </Route>
+
                 <Route path="*" element={<NotFound />} />
             </Route>
         </Routes>
@@ -72,7 +98,9 @@ const App = () => (
     <Sonner richColors />
     <BrowserRouter>
         <AuthProvider>
-            <AppRoutes />
+            <AdminAuthProvider>
+                <AppRoutes />
+            </AdminAuthProvider>
         </AuthProvider>
     </BrowserRouter>
   </QueryClientProvider>

@@ -52,8 +52,8 @@ export interface Turf {
   id: number;
   name: string;
   description: string;
-  location: string;
-  pricePerHour: number;
+  address: string;
+  rent: number;
   amenities: string[];
   images: string[];
   rating: number;
@@ -133,4 +133,103 @@ export interface Booking {
   bookingReference: string;
   createdAt: string;
   notes?: string;
+}
+
+
+// Admin-specific types
+/**
+ * Represents the admin registration data.
+ */
+export interface AdminDto {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phone: string;
+  username: string;
+}
+
+/**
+ * Represents the admin login request.
+ */
+export interface AdminLoginDto {
+  username: string;
+  password: string;
+}
+
+/**
+ * Represents the admin login response.
+ */
+export interface AdminLoginResponse {
+  token: string;
+  type: 'Bearer';
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+/**
+ * Represents the admin user object.
+ */
+export interface AdminUser {
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+/**
+ * Represents turf status enum.
+ */
+export enum TurfStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  PENDING = 'PENDING'
+}
+
+/**
+ * Represents GeoJSON Point for coordinates.
+ */
+export interface GeoJsonPoint {
+  type: 'Point';
+  coordinates: [number, number]; // [longitude, latitude]
+}
+
+/**
+ * Represents the turf DTO for creating/updating turfs via admin.
+ */
+export interface TurfDto {
+  id?: string;
+  name: string;
+  status: TurfStatus;
+  owner: number;
+  manager: number;
+  rent: number;
+  amenities: string;
+  phone: string;
+  email: string;
+  address: string;
+  coordinates: GeoJsonPoint;
+}
+
+/**
+ * Represents the full turf entity response.
+ */
+export interface TurfEntity {
+  id: string;
+  name: string;
+  status: TurfStatus;
+  owner: number;
+  manager: number;
+  rent: number;
+  amenities: string;
+  phone: string;
+  email: string;
+  address: string;
+  coordinates: GeoJsonPoint;
+  slotDuration: number;
+  startHour: number;
+  endHour: number;
+  createdAt: string;
 }
